@@ -1,26 +1,26 @@
 ## resources/message.py
- from flask_restful import reqparse
- from conf.firebaseInit import fs
+from flask_restful import reqparse
+from conf.firebaseInit import fs
 from conf.util import Util
 from events.result import Result
 from events.select import Select
 from events.setting import Setting
 from resources.keyboard import *
- parser = reqparse.RequestParser()
+parser = reqparse.RequestParser()
 parser.add_argument('user_key', type=str, required=True)
 parser.add_argument('type', type=str, required=True)
 parser.add_argument('content', type=str, required=True)
- class Message(Resource):
+class Message(Resource):
     def __init__(self):
         self.args = parser.parse_args()
         self.user_key = self.args[Const.ARG_USER_KEY]
         self.req_type = self.args[Const.ARG_TYPE]
         self.content = self.args[Const.ARG_CONTENT]
-     def post(self):
+    def post(self):
         select = Select(self.args)
         setting = Setting(self.args)
         result = Result(self.args)
-         if self.content == Const.BTN_SELECT_LUNCH:
+        if self.content == Const.BTN_SELECT_LUNCH:
             return select.show_restaurant_list()
         elif self.content == Const.BTN_GOTO_START:
             return Util.show_start_menu()
@@ -43,7 +43,7 @@ parser.add_argument('content', type=str, required=True)
          # 사용자 입력처리
         user = fs.collection(Const.COL_USER).document(self.user_key).get()
         user_state = user.get(Const.FIELD_STATE)
-         if user_state == Const.STATE_SELECT_GROUP:
+        if user_state == Const.STATE_SELECT_GROUP:
             return select.group_selected()
         elif user_state == Const.STATE_SELECT_RESTAURANT:
             return select.restaurant_selected()
