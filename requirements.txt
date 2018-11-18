@@ -1,0 +1,4 @@
+Flask
+Flask_RESTful
+firebase-admin
+uwsgi
