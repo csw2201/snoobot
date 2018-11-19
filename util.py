@@ -1,55 +1,84 @@
-## evnets/result.py
-
-import operator
+from datetime import datetime, timedelta
+import re
+import pytz
+from flask import json, Response
 
 from conf.const import Const
-from conf.firebaseInit import fs
-from conf.util import Util
-from events.args import Args
-from events.select import Select
 
 
-class Result(Args):
-    def show_result(self):
-        try:
-            # 해당 그룹에서 가장 많이 나온 순서대로 보여준다.
-            user = fs.collection(Const.COL_USER).document(self.user_key).get()
-            user_group = user.get(Const.FIELD_GROUP)
-        except:
-            print('Not Found User Group')
-            return Select(self.args).show_group_list()
+class Util:
+    @classmethod
+    def get_day_str(cls, days=0):
+        tz = pytz.timezone('Asia/Seoul')
+        now = datetime.now(tz) + timedelta(days=days)
+        day_str = now.strftime('%Y.%m.%d')
+        return day_str
 
-        today = Util.get_day_str()
-        today_format = '[{}]'.format(today)
-        msg_list = [today_format]
-        result_dict = {}
-        try:
-            result = fs.collection(Const.COL_SELECT).document(user_group).collection(Const.COL_TODAY).document(today).get()
-            for user_key, restaurant in result._data.items():
-                if restaurant in result_dict:
-                    result_dict[restaurant] += 1
-                else:
-                    result_dict[restaurant] = 1
+    @classmethod
+    def get_time_str(cls, days=0):
+        tz = pytz.timezone('Asia/Seoul')
+        now = datetime.now(tz) + timedelta(days=days)
+        day_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        return day_str
 
-            sorted_list = sorted(result_dict.items(), key=operator.itemgetter(1))
-            sorted_list.reverse()
+    @classmethod
+    def send_response(cls, rst):
+        json_string = json.dumps(rst)
+        response = Response(json_string, content_type="application/json; charset=utf-8")
+        return response
 
-            for item in sorted_list:
-                title = item[0]
-                count = item[1]
-                msg_list.append('{}명 : {}'.format(count, title))
-        except:
-            print('Error')
-            msg_list.append('아직 아무도 선택하지 않았습니다.')
+    @classmethod
+    def show_start_menu(cls, msg='원하는 메뉴를 선택해 주세요', img_src=None):
+        if img_src:
+            rst = {
+                "message": {
+                    "text": msg,
+                    "photo": {
+                        "url": img_src,
+                        'width': 640,
+                        "height": 480
+                    }
+                },
+                "keyboard": {
+                    "type": "buttons",
+                    "buttons": Const.DEFAULT_KEYBOARD
+                }
+            }
+        else:
+            rst = {
+                "message": {
+                    "text": msg
+                },
+                "keyboard": {
+                    "type": "buttons",
+                    "buttons": Const.DEFAULT_KEYBOARD
+                }
+            }
+        return Util.send_response(rst)
 
+    @classmethod
+    def show_donate(cls):
         rst = {
             "message": {
-                "text": '\n'.join(msg_list)
+                "text": '토스 QR & PayPal.me/payw/1',
+                "photo": {
+                    "url": "https://dl2.pushbulletusercontent.com/tWoO4jdenuRQdXvAWOjM7IXUhMM0z55S/1525226662706.jpg",
+                    "width": 620,
+                    "height": 620
+                },
+                "message_button": {
+                    "label": "네이버페이",
+                    "url": "http://npay.to/4c30232c7d9082e30f9c"
+                }
             },
             "keyboard": {
                 "type": "buttons",
                 "buttons": Const.DEFAULT_KEYBOARD
             }
         }
-
         return Util.send_response(rst)
+
+    @classmethod
+    def is_img(cls, desc):
+        result = re.match(r"https?://.*", desc)
+        return result
