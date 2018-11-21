@@ -55,30 +55,3 @@ class Util:
                 }
             }
         return Util.send_response(rst)
-
-    @classmethod
-    def show_donate(cls):
-        rst = {
-            "message": {
-                "text": '토스 QR & PayPal.me/payw/1',
-                "photo": {
-                    "url": "https://dl2.pushbulletusercontent.com/tWoO4jdenuRQdXvAWOjM7IXUhMM0z55S/1525226662706.jpg",
-                    "width": 620,
-                    "height": 620
-                },
-                "message_button": {
-                    "label": "네이버페이",
-                    "url": "http://npay.to/4c30232c7d9082e30f9c"
-                }
-            },
-            "keyboard": {
-                "type": "buttons",
-                "buttons": Const.DEFAULT_KEYBOARD
-            }
-        }
-        return Util.send_response(rst)
-
-    @classmethod
-    def is_img(cls, desc):
-        result = re.match(r"https?://.*", desc)
-        return result
