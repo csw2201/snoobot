@@ -22,5 +22,4 @@ def hello_world():
 api.add_resource(Keyboard, '/keyboard')
 api.add_resource(Message, '/message')
 
-if __name__ == '__main__':
-    app.run()
+app.run()
