@@ -3,7 +3,7 @@
 from flask import json, Response
 from flask_restful import Resource
 
-from conf.const import Const
+from const import Const
 
 
 class Keyboard(Resource):

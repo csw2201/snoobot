@@ -3,8 +3,8 @@ from flask import Flask
 from flask_restful import Api
 
 
-from resources.keyboard import Keyboard
-from resources.message import Message
+from keyboard import Keyboard
+from message import Message
 
 
 

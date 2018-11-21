@@ -1,4 +1,4 @@
-from conf.const import Const
+from const import Const
 import re
 
 

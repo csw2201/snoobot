@@ -2,11 +2,11 @@
 
 import operator
 
-from conf.const import Const
-from conf.firebaseInit import fs
-from conf.util import Util
-from events.args import Args
-from events.select import Select
+from const import Const
+from firebaseInit import fs
+from util import Util
+from args import Args
+from select import Select
 
 
 class Result(Args):

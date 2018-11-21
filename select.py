@@ -5,10 +5,10 @@ from random import shuffle
 
 from firebase_admin import firestore
 
-from conf.const import Const
-from conf.firebaseInit import fs
-from conf.util import Util
-from events.args import Args
+from const import Const
+from firebaseInit import fs
+from util import Util
+from args import Args
 
 
 class Select(Args):

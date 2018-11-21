@@ -2,12 +2,12 @@
 
 from flask_restful import reqparse
 
-from conf.firebaseInit import fs
-from conf.util import Util
-from events.result import Result
-from events.select import Select
-from events.setting import Setting
-from resources.keyboard import *
+from firebaseInit import fs
+from util import Util
+from result import Result
+from select import Select
+from setting import Setting
+from keyboard import *
 
 parser = reqparse.RequestParser()
 parser.add_argument('user_key', type=str, required=True)

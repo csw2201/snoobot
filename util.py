@@ -3,7 +3,7 @@ import re
 import pytz
 from flask import json, Response
 
-from conf.const import Const
+from const import Const
 
 
 class Util:
